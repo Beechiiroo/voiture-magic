@@ -5,8 +5,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UserProvider } from "@/context/UserContext";
+import SiteVerification from "@/components/SiteVerification";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -18,6 +19,17 @@ import NotFound from "./pages/NotFound";
 const App = () => {
   // Create a new QueryClient instance inside the component
   const [queryClient] = useState(() => new QueryClient());
+  const [isSiteVerified, setIsSiteVerified] = useState(false);
+
+  useEffect(() => {
+    // Check if the user has already verified this session
+    const verified = sessionStorage.getItem('site-verified') === 'true';
+    setIsSiteVerified(verified);
+  }, []);
+
+  const handleSiteVerified = () => {
+    setIsSiteVerified(true);
+  };
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -25,6 +37,7 @@ const App = () => {
         <TooltipProvider>
           <Toaster />
           <Sonner />
+          {!isSiteVerified && <SiteVerification onVerified={handleSiteVerified} />}
           <BrowserRouter>
             <AnimatePresence mode="wait">
               <Routes>

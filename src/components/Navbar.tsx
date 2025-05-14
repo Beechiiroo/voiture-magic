@@ -2,14 +2,16 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Car, Menu, X, User } from "lucide-react";
+import { Car, Menu, X, User, LogOut } from "lucide-react";
 import ThemeSwitcher from './ThemeSwitcher';
 import LanguageSwitcher from './LanguageSwitcher';
+import { useUser } from '@/context/UserContext';
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const { user, isLoggedIn, logout } = useUser();
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -31,6 +33,11 @@ const Navbar = () => {
   }, []);
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleLogout = () => {
+    logout();
+    setMobileMenuOpen(false);
+  };
 
   return (
     <nav className={`bg-white dark:bg-gray-900 py-4 fixed w-full top-0 z-50 transition-all duration-300 ${
@@ -92,15 +99,35 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-2">
             <ThemeSwitcher />
             <LanguageSwitcher />
-            <Link to="/login">
-              <Button variant="outline" size="sm" className="flex items-center">
-                <User className="h-4 w-4 mr-2" />
-                Connexion
-              </Button>
-            </Link>
-            <Link to="/signup">
-              <Button className="bg-rental-600 hover:bg-rental-700 dark:bg-rental-500 dark:hover:bg-rental-600">S'inscrire</Button>
-            </Link>
+            
+            {isLoggedIn ? (
+              <div className="flex items-center space-x-2">
+                <div className="text-sm">
+                  <span className="font-medium text-gray-700 dark:text-gray-300">
+                    {user?.name}
+                  </span>
+                  <span className="ml-1 px-2 py-0.5 bg-rental-100 dark:bg-rental-900 text-rental-700 dark:text-rental-300 rounded-full text-xs">
+                    {user?.role === 'admin' ? 'Admin' : 'Utilisateur'}
+                  </span>
+                </div>
+                <Button variant="outline" size="sm" className="flex items-center" onClick={logout}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Déconnexion
+                </Button>
+              </div>
+            ) : (
+              <>
+                <Link to="/login">
+                  <Button variant="outline" size="sm" className="flex items-center">
+                    <User className="h-4 w-4 mr-2" />
+                    Connexion
+                  </Button>
+                </Link>
+                <Link to="/signup">
+                  <Button className="bg-rental-600 hover:bg-rental-700 dark:bg-rental-500 dark:hover:bg-rental-600">S'inscrire</Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -169,15 +196,34 @@ const Navbar = () => {
                 Contact
               </Link>
               <div className="border-t dark:border-gray-700 mt-2 pt-2 flex flex-col space-y-2 p-3">
-                <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="outline" size="sm" className="flex items-center justify-center w-full">
-                    <User className="h-4 w-4 mr-2" />
-                    Connexion
-                  </Button>
-                </Link>
-                <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
-                  <Button className="w-full bg-rental-600 hover:bg-rental-700 dark:bg-rental-500 dark:hover:bg-rental-600">S'inscrire</Button>
-                </Link>
+                {isLoggedIn ? (
+                  <>
+                    <div className="text-sm p-2">
+                      <span className="font-medium text-gray-700 dark:text-gray-300">
+                        {user?.name}
+                      </span>
+                      <span className="ml-1 px-2 py-0.5 bg-rental-100 dark:bg-rental-900 text-rental-700 dark:text-rental-300 rounded-full text-xs">
+                        {user?.role === 'admin' ? 'Admin' : 'Utilisateur'}
+                      </span>
+                    </div>
+                    <Button variant="outline" size="sm" className="flex items-center justify-center w-full" onClick={handleLogout}>
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Déconnexion
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="outline" size="sm" className="flex items-center justify-center w-full">
+                        <User className="h-4 w-4 mr-2" />
+                        Connexion
+                      </Button>
+                    </Link>
+                    <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
+                      <Button className="w-full bg-rental-600 hover:bg-rental-700 dark:bg-rental-500 dark:hover:bg-rental-600">S'inscrire</Button>
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>

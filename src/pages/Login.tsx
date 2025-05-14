@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,6 +13,7 @@ import { toast } from "@/components/ui/use-toast";
 import { Captcha } from "@/components/ui/captcha";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { useUser } from "@/context/UserContext";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Adresse e-mail invalide" }),
@@ -24,6 +25,8 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [captchaVerified, setCaptchaVerified] = useState(false);
+  const { login } = useUser();
+  const navigate = useNavigate();
   
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -33,7 +36,7 @@ const Login = () => {
     },
   });
 
-  const onSubmit = (values: LoginFormValues) => {
+  const onSubmit = async (values: LoginFormValues) => {
     if (!captchaVerified) {
       toast({
         title: "Vérification requise",
@@ -43,12 +46,21 @@ const Login = () => {
       return;
     }
     
-    console.log(values);
-    // Simulation de connexion réussie
-    toast({
-      title: "Connexion réussie",
-      description: "Bienvenue sur CarRentalPro!",
-    });
+    try {
+      await login(values.email, values.password);
+      toast({
+        title: "Connexion réussie",
+        description: "Bienvenue sur CarRentalPro!",
+        variant: "success",
+      });
+      navigate("/");
+    } catch (error) {
+      toast({
+        title: "Erreur de connexion",
+        description: "Vérifiez vos identifiants et réessayez.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
