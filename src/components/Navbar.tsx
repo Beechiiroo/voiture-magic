@@ -1,55 +1,114 @@
 
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Car, Menu, X, User } from "lucide-react";
+import ThemeSwitcher from './ThemeSwitcher';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const isActive = (path: string) => location.pathname === path;
+
   return (
-    <nav className="bg-white shadow-md py-4 fixed w-full top-0 z-50">
+    <nav className={`bg-white dark:bg-gray-900 py-4 fixed w-full top-0 z-50 transition-all duration-300 ${
+      scrolled ? 'shadow-md py-3' : 'shadow-sm'
+    }`}>
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2">
-              <Car className="h-6 w-6 text-rental-600" />
-              <span className="text-xl font-bold text-rental-800">CarRental<span className="text-rental-600">Pro</span></span>
+            <Link to="/" className="flex items-center space-x-2 group">
+              <Car className="h-6 w-6 text-rental-600 group-hover:scale-110 transition-transform" />
+              <span className="text-xl font-bold dark:text-white">CarRental<span className="text-rental-600">Pro</span></span>
             </Link>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8">
-            <Link to="/" className="text-gray-700 hover:text-rental-600 transition-colors font-medium">
+            <Link 
+              to="/" 
+              className={`transition-colors font-medium border-b-2 py-1 ${
+                isActive('/') 
+                  ? 'text-rental-600 dark:text-rental-400 border-rental-600 dark:border-rental-400' 
+                  : 'text-gray-700 dark:text-gray-300 border-transparent hover:text-rental-600 dark:hover:text-rental-400'
+              }`}
+            >
               Accueil
             </Link>
-            <Link to="/voitures" className="text-gray-700 hover:text-rental-600 transition-colors font-medium">
+            <Link 
+              to="/voitures" 
+              className={`transition-colors font-medium border-b-2 py-1 ${
+                isActive('/voitures') 
+                  ? 'text-rental-600 dark:text-rental-400 border-rental-600 dark:border-rental-400' 
+                  : 'text-gray-700 dark:text-gray-300 border-transparent hover:text-rental-600 dark:hover:text-rental-400'
+              }`}
+            >
               Nos Véhicules
             </Link>
-            <Link to="/reservations" className="text-gray-700 hover:text-rental-600 transition-colors font-medium">
+            <Link 
+              to="/reservations" 
+              className={`transition-colors font-medium border-b-2 py-1 ${
+                isActive('/reservations') 
+                  ? 'text-rental-600 dark:text-rental-400 border-rental-600 dark:border-rental-400' 
+                  : 'text-gray-700 dark:text-gray-300 border-transparent hover:text-rental-600 dark:hover:text-rental-400'
+              }`}
+            >
               Réservations
             </Link>
-            <Link to="/contact" className="text-gray-700 hover:text-rental-600 transition-colors font-medium">
+            <Link 
+              to="/contact" 
+              className={`transition-colors font-medium border-b-2 py-1 ${
+                isActive('/contact') 
+                  ? 'text-rental-600 dark:text-rental-400 border-rental-600 dark:border-rental-400' 
+                  : 'text-gray-700 dark:text-gray-300 border-transparent hover:text-rental-600 dark:hover:text-rental-400'
+              }`}
+            >
               Contact
             </Link>
           </div>
 
-          <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline" size="sm" className="flex items-center">
-              <User className="h-4 w-4 mr-2" />
-              Connexion
-            </Button>
-            <Button className="bg-rental-600 hover:bg-rental-700">S'inscrire</Button>
+          <div className="hidden md:flex items-center space-x-2">
+            <ThemeSwitcher />
+            <LanguageSwitcher />
+            <Link to="/login">
+              <Button variant="outline" size="sm" className="flex items-center">
+                <User className="h-4 w-4 mr-2" />
+                Connexion
+              </Button>
+            </Link>
+            <Link to="/signup">
+              <Button className="bg-rental-600 hover:bg-rental-700 dark:bg-rental-500 dark:hover:bg-rental-600">S'inscrire</Button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center space-x-2">
+            <ThemeSwitcher />
+            <LanguageSwitcher />
             <button
-              className="text-gray-600 hover:text-rental-600 focus:outline-none"
+              className="text-gray-600 dark:text-gray-300 hover:text-rental-600 dark:hover:text-rental-400 focus:outline-none"
               onClick={toggleMobileMenu}
             >
               {mobileMenuOpen ? (
@@ -63,42 +122,62 @@ const Navbar = () => {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden animate-fade-in">
-            <div className="pt-4 pb-3 space-y-3">
+          <div className="md:hidden animate-fade-in mt-4 bg-white dark:bg-gray-800 rounded-lg shadow-xl border dark:border-gray-700">
+            <div className="py-3 space-y-0">
               <Link
                 to="/"
-                className="block text-gray-700 hover:bg-rental-50 hover:text-rental-600 px-3 py-2 rounded-md text-base font-medium"
+                className={`block px-3 py-2.5 ${
+                  isActive('/') 
+                    ? 'bg-rental-50 dark:bg-rental-900/50 text-rental-600 dark:text-rental-400 font-medium' 
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Accueil
               </Link>
               <Link
                 to="/voitures"
-                className="block text-gray-700 hover:bg-rental-50 hover:text-rental-600 px-3 py-2 rounded-md text-base font-medium"
+                className={`block px-3 py-2.5 ${
+                  isActive('/voitures') 
+                    ? 'bg-rental-50 dark:bg-rental-900/50 text-rental-600 dark:text-rental-400 font-medium' 
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Nos Véhicules
               </Link>
               <Link
                 to="/reservations"
-                className="block text-gray-700 hover:bg-rental-50 hover:text-rental-600 px-3 py-2 rounded-md text-base font-medium"
+                className={`block px-3 py-2.5 ${
+                  isActive('/reservations') 
+                    ? 'bg-rental-50 dark:bg-rental-900/50 text-rental-600 dark:text-rental-400 font-medium' 
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Réservations
               </Link>
               <Link
                 to="/contact"
-                className="block text-gray-700 hover:bg-rental-50 hover:text-rental-600 px-3 py-2 rounded-md text-base font-medium"
+                className={`block px-3 py-2.5 ${
+                  isActive('/contact') 
+                    ? 'bg-rental-50 dark:bg-rental-900/50 text-rental-600 dark:text-rental-400 font-medium' 
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Contact
               </Link>
-              <div className="pt-4 flex flex-col space-y-2">
-                <Button variant="outline" size="sm" className="flex items-center justify-center">
-                  <User className="h-4 w-4 mr-2" />
-                  Connexion
-                </Button>
-                <Button className="bg-rental-600 hover:bg-rental-700">S'inscrire</Button>
+              <div className="border-t dark:border-gray-700 mt-2 pt-2 flex flex-col space-y-2 p-3">
+                <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="outline" size="sm" className="flex items-center justify-center w-full">
+                    <User className="h-4 w-4 mr-2" />
+                    Connexion
+                  </Button>
+                </Link>
+                <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
+                  <Button className="w-full bg-rental-600 hover:bg-rental-700 dark:bg-rental-500 dark:hover:bg-rental-600">S'inscrire</Button>
+                </Link>
               </div>
             </div>
           </div>
