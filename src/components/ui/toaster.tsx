@@ -1,3 +1,4 @@
+
 import { useToast } from "@/hooks/use-toast"
 import {
   Toast,
@@ -13,9 +14,14 @@ export function Toaster() {
 
   return (
     <ToastProvider>
-      {toasts.map(function ({ id, title, description, action, ...props }) {
+      {toasts.map(function ({ id, title, description, action, variant, ...props }) {
+        // Map our custom variants to the ones supported by the Toast component
+        const toastVariant = variant === 'success' ? 'success' :
+                            variant === 'warning' ? 'warning' :
+                            variant === 'destructive' ? 'destructive' : 'default';
+        
         return (
-          <Toast key={id} {...props}>
+          <Toast key={id} variant={toastVariant} {...props}>
             <div className="grid gap-1">
               {title && <ToastTitle>{title}</ToastTitle>}
               {description && (
