@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Car, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
+import { Captcha } from "@/components/ui/captcha";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -22,6 +23,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [captchaVerified, setCaptchaVerified] = useState(false);
   
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -32,6 +34,15 @@ const Login = () => {
   });
 
   const onSubmit = (values: LoginFormValues) => {
+    if (!captchaVerified) {
+      toast({
+        title: "Vérification requise",
+        description: "Veuillez compléter la vérification anti-robot.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     console.log(values);
     // Simulation de connexion réussie
     toast({
@@ -112,6 +123,8 @@ const Login = () => {
                     </FormItem>
                   )}
                 />
+                
+                <Captcha onVerify={setCaptchaVerified} />
                 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">

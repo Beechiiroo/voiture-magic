@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Calendar, MapPin, User, Star } from "lucide-react";
+import { Calendar, MapPin, User, Star, Heart, ToggleLeft, ToggleRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface CarCardProps {
@@ -22,10 +22,14 @@ interface CarCardProps {
     year?: number;
     brand?: string;
   };
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
+  onToggleAvailability?: () => void;
 }
 
-const CarCard = ({ car }: CarCardProps) => {
+const CarCard = ({ car, isFavorite = false, onToggleFavorite, onToggleAvailability }: CarCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
+  const isAdmin = localStorage.getItem('userRole') === 'admin'; // Simple check for admin role
 
   return (
     <motion.div 
@@ -51,6 +55,14 @@ const CarCard = ({ car }: CarCardProps) => {
             <p className="text-white font-bold text-xl">Indisponible</p>
           </div>
         )}
+        <button
+          onClick={onToggleFavorite}
+          className={`absolute top-2 left-2 p-2 rounded-full bg-white/80 backdrop-blur-sm transition-colors ${
+            isFavorite ? 'text-red-500' : 'text-gray-400'
+          }`}
+        >
+          <Heart className={`h-5 w-5 ${isFavorite ? 'fill-red-500' : ''}`} />
+        </button>
       </div>
       <div className="p-4">
         <div className="flex justify-between items-center">
@@ -103,6 +115,28 @@ const CarCard = ({ car }: CarCardProps) => {
             </Button>
           </Link>
         </div>
+        
+        {isAdmin && (
+          <div className="mt-3 flex items-center justify-between border-t pt-2">
+            <span className="text-sm text-gray-600 dark:text-gray-400">Disponibilité:</span>
+            <button
+              onClick={onToggleAvailability}
+              className="flex items-center text-sm font-medium"
+            >
+              {car.available ? (
+                <>
+                  <ToggleRight className="w-5 h-5 text-green-500 mr-1" />
+                  <span className="text-green-600">Disponible</span>
+                </>
+              ) : (
+                <>
+                  <ToggleLeft className="w-5 h-5 text-gray-500 mr-1" />
+                  <span className="text-gray-600">Indisponible</span>
+                </>
+              )}
+            </button>
+          </div>
+        )}
       </div>
       
       {/* Quick action popup on hover */}

@@ -1,10 +1,11 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { toast } from "@/components/ui/use-toast";
 import CarCard from "./CarCard";
 
-// Sample car data
+// Updated car data with Tunisian cities
 const cars = [
   {
     id: "1",
@@ -13,9 +14,14 @@ const cars = [
     price: 120,
     image: "https://images.unsplash.com/photo-1566008885218-90abf9200ddb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     seats: 5,
-    location: "Paris",
+    location: "Tunis",
     rating: 4.9,
     available: true,
+    features: ["Autopilot", "Caméra 360°", "Supercharging"],
+    transmission: "Automatique",
+    fuelType: "Électrique",
+    year: 2023,
+    brand: "Tesla"
   },
   {
     id: "2",
@@ -24,9 +30,14 @@ const cars = [
     price: 95,
     image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     seats: 5,
-    location: "Lyon",
+    location: "Sfax",
     rating: 4.7,
     available: true,
+    features: ["GPS", "Sièges chauffants", "Bluetooth"],
+    transmission: "Automatique",
+    fuelType: "Essence",
+    year: 2022,
+    brand: "BMW"
   },
   {
     id: "3",
@@ -35,9 +46,14 @@ const cars = [
     price: 110,
     image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     seats: 5,
-    location: "Marseille",
+    location: "Sousse",
     rating: 4.8,
     available: false,
+    features: ["Caméra 360°", "Toit panoramique", "Sièges en cuir"],
+    transmission: "Automatique",
+    fuelType: "Diesel",
+    year: 2023,
+    brand: "Mercedes"
   },
   {
     id: "4",
@@ -46,9 +62,14 @@ const cars = [
     price: 105,
     image: "https://images.unsplash.com/photo-1540066019607-e5f69323a8dc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     seats: 5,
-    location: "Nice",
+    location: "Hammamet",
     rating: 4.6,
     available: true,
+    features: ["Toit ouvrant", "Sièges chauffants", "GPS"],
+    transmission: "Automatique",
+    fuelType: "Essence",
+    year: 2022,
+    brand: "Audi"
   },
 ];
 
@@ -58,6 +79,15 @@ const categories = ["Tous", "Berline", "SUV", "Électrique", "Sport"];
 const FeaturedCars = () => {
   const [activeCategory, setActiveCategory] = useState("Tous");
   const [visibleCars, setVisibleCars] = useState(cars);
+  const [favorites, setFavorites] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Load favorites from localStorage if available
+    const storedFavorites = localStorage.getItem('carFavorites');
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
+    }
+  }, []);
 
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
@@ -66,6 +96,52 @@ const FeaturedCars = () => {
       setVisibleCars(cars);
     } else {
       setVisibleCars(cars.filter(car => car.category === category));
+    }
+  };
+
+  const toggleFavorite = (id: string) => {
+    setFavorites(prev => {
+      const newFavorites = prev.includes(id) 
+        ? prev.filter(carId => carId !== id)
+        : [...prev, id];
+      
+      // Save to localStorage
+      localStorage.setItem('carFavorites', JSON.stringify(newFavorites));
+      
+      // Show toast notification
+      toast({
+        title: prev.includes(id) ? "Retiré des favoris" : "Ajouté aux favoris",
+        description: prev.includes(id) 
+          ? "Le véhicule a été retiré de vos favoris" 
+          : "Le véhicule a été ajouté à vos favoris",
+      });
+      
+      return newFavorites;
+    });
+  };
+
+  const toggleAvailability = (id: string) => {
+    const updatedCars = cars.map(car => {
+      if (car.id === id) {
+        return { ...car, available: !car.available };
+      }
+      return car;
+    });
+    
+    // Update the visible cars based on the current category
+    if (activeCategory === "Tous") {
+      setVisibleCars(updatedCars);
+    } else {
+      setVisibleCars(updatedCars.filter(car => car.category === activeCategory));
+    }
+    
+    // Show toast notification
+    const car = cars.find(car => car.id === id);
+    if (car) {
+      toast({
+        title: `Disponibilité mise à jour`,
+        description: `${car.name} est maintenant ${!car.available ? 'disponible' : 'indisponible'}`,
+      });
     }
   };
 
@@ -111,7 +187,13 @@ const FeaturedCars = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {visibleCars.map((car) => (
-            <CarCard key={car.id} car={car} />
+            <CarCard 
+              key={car.id} 
+              car={car} 
+              isFavorite={favorites.includes(car.id)}
+              onToggleFavorite={() => toggleFavorite(car.id)}
+              onToggleAvailability={() => toggleAvailability(car.id)}
+            />
           ))}
         </div>
 
