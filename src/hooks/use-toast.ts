@@ -9,6 +9,7 @@ export interface Toast {
   description?: string;
   variant?: ToastVariant;
   duration?: number;
+  action?: React.ReactNode;
 }
 
 export interface ToastOptions {
@@ -16,6 +17,7 @@ export interface ToastOptions {
   description?: string;
   variant?: ToastVariant;
   duration?: number;
+  action?: React.ReactNode;
 }
 
 let toastCount = 0;
@@ -25,7 +27,6 @@ function generateId() {
 }
 
 // This is a simple implementation of toast functionality
-// In a real app, you'd want to use a more robust solution
 export function useToast() {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
@@ -36,6 +37,7 @@ export function useToast() {
       description: options.description,
       variant: options.variant || 'default',
       duration: options.duration || 5000,
+      action: options.action,
     };
 
     setToasts((prev) => [...prev, toast]);
@@ -45,6 +47,18 @@ export function useToast() {
   const dismissToast = (toastId: string) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== toastId));
   };
+
+  useEffect(() => {
+    const handleAddToast = (event: CustomEvent<ToastOptions>) => {
+      addToast(event.detail);
+    };
+
+    document.addEventListener('add-toast', handleAddToast as EventListener);
+
+    return () => {
+      document.removeEventListener('add-toast', handleAddToast as EventListener);
+    };
+  }, []);
 
   return {
     toasts,
@@ -60,18 +74,3 @@ export const toast = (options: ToastOptions) => {
   });
   document.dispatchEvent(event);
 };
-
-// Clean up event listeners when the component unmounts
-useEffect(() => {
-  const handleAddToast = (event: CustomEvent<ToastOptions>) => {
-    toast(event.detail);
-  };
-
-  document.addEventListener('add-toast', handleAddToast as EventListener);
-
-  return () => {
-    document.removeEventListener('add-toast', handleAddToast as EventListener);
-  };
-}, []);
-
-export default useToast;
