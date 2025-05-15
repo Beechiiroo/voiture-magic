@@ -254,7 +254,6 @@ const translations: Record<string, Record<string, string>> = {
     "featuredCarsDescription": "Discover our selection of high-quality vehicles for all your needs and budgets. We offer a wide range of cars to meet all your requirements.",
     "tous": "All",
     "berline": "Sedan",
-    "suv": "SUV",
     "électrique": "Electric",
     "sport": "Sport",
     "viewAllVehicles": "View All Vehicles",
@@ -453,7 +452,6 @@ const translations: Record<string, Record<string, string>> = {
     "featuredCarsDescription": "اكتشف مجموعتنا من السيارات عالية الجودة لجميع احتياجاتك وميزانياتك. نحن نقدم مجموعة واسعة من السيارات لتلبية جميع متطلباتك.",
     "tous": "الكل",
     "berline": "سيدان",
-    "suv": "دفع رباعي",
     "électrique": "كهربائية",
     "sport": "رياضية",
     "viewAllVehicles": "عرض جميع السيارات",
@@ -523,7 +521,6 @@ const translations: Record<string, Record<string, string>> = {
     "featuredCarsDescription": "Scopri la nostra selezione di veicoli di alta qualità per tutte le tue esigenze e budget. Offriamo una vasta gamma di auto per soddisfare tutti i tuoi requisiti.",
     "tous": "Tutte",
     "berline": "Berlina",
-    "suv": "SUV",
     "électrique": "Elettrica",
     "sport": "Sport",
     "viewAllVehicles": "Visualizza Tutti i Veicoli",
@@ -640,4 +637,3 @@ export const useTranslation = () => {
   }
   return context;
 };
-
