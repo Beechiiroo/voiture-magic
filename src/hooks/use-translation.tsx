@@ -56,7 +56,6 @@ const translations: Record<string, Record<string, string>> = {
     "featuredCarsDescription": "Découvrez notre sélection de véhicules de haute qualité pour tous vos besoins et budgets. Nous offrons une large gamme de voitures pour répondre à toutes vos exigences.",
     "tous": "Tous",
     "berline": "Berline",
-    "suv": "SUV",
     "électrique": "Électrique",
     "sport": "Sport",
     "viewAllVehicles": "Voir tous les véhicules",
@@ -641,3 +640,4 @@ export const useTranslation = () => {
   }
   return context;
 };
+
