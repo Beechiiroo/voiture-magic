@@ -6,12 +6,14 @@ import { Car, Menu, X, User, LogOut } from "lucide-react";
 import ThemeSwitcher from './ThemeSwitcher';
 import LanguageSwitcher from './LanguageSwitcher';
 import { useUser } from '@/context/UserContext';
+import { useTranslation } from '@/hooks/use-translation';
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const { user, isLoggedIn, logout } = useUser();
+  const { t } = useTranslation();
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -62,7 +64,7 @@ const Navbar = () => {
                   : 'text-gray-700 dark:text-gray-300 border-transparent hover:text-rental-600 dark:hover:text-rental-400'
               }`}
             >
-              Accueil
+              {t('home')}
             </Link>
             <Link 
               to="/voitures" 
@@ -72,7 +74,7 @@ const Navbar = () => {
                   : 'text-gray-700 dark:text-gray-300 border-transparent hover:text-rental-600 dark:hover:text-rental-400'
               }`}
             >
-              Nos Véhicules
+              {t('cars')}
             </Link>
             <Link 
               to="/reservations" 
@@ -82,7 +84,7 @@ const Navbar = () => {
                   : 'text-gray-700 dark:text-gray-300 border-transparent hover:text-rental-600 dark:hover:text-rental-400'
               }`}
             >
-              Réservations
+              {t('reservations')}
             </Link>
             <Link 
               to="/contact" 
@@ -92,7 +94,7 @@ const Navbar = () => {
                   : 'text-gray-700 dark:text-gray-300 border-transparent hover:text-rental-600 dark:hover:text-rental-400'
               }`}
             >
-              Contact
+              {t('contact')}
             </Link>
           </div>
 
@@ -107,12 +109,12 @@ const Navbar = () => {
                     {user?.name}
                   </span>
                   <span className="ml-1 px-2 py-0.5 bg-rental-100 dark:bg-rental-900 text-rental-700 dark:text-rental-300 rounded-full text-xs">
-                    {user?.role === 'admin' ? 'Admin' : 'Utilisateur'}
+                    {user?.role === 'admin' ? t('admin') : t('user')}
                   </span>
                 </div>
                 <Button variant="outline" size="sm" className="flex items-center" onClick={logout}>
                   <LogOut className="h-4 w-4 mr-2" />
-                  Déconnexion
+                  {t('logout')}
                 </Button>
               </div>
             ) : (
@@ -120,11 +122,11 @@ const Navbar = () => {
                 <Link to="/login">
                   <Button variant="outline" size="sm" className="flex items-center">
                     <User className="h-4 w-4 mr-2" />
-                    Connexion
+                    {t('login')}
                   </Button>
                 </Link>
                 <Link to="/signup">
-                  <Button className="bg-rental-600 hover:bg-rental-700 dark:bg-rental-500 dark:hover:bg-rental-600">S'inscrire</Button>
+                  <Button className="bg-rental-600 hover:bg-rental-700 dark:bg-rental-500 dark:hover:bg-rental-600">{t('signup')}</Button>
                 </Link>
               </>
             )}
@@ -160,7 +162,7 @@ const Navbar = () => {
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Accueil
+                {t('home')}
               </Link>
               <Link
                 to="/voitures"
@@ -171,7 +173,7 @@ const Navbar = () => {
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Nos Véhicules
+                {t('cars')}
               </Link>
               <Link
                 to="/reservations"
@@ -182,7 +184,7 @@ const Navbar = () => {
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Réservations
+                {t('reservations')}
               </Link>
               <Link
                 to="/contact"
@@ -193,7 +195,7 @@ const Navbar = () => {
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Contact
+                {t('contact')}
               </Link>
               <div className="border-t dark:border-gray-700 mt-2 pt-2 flex flex-col space-y-2 p-3">
                 {isLoggedIn ? (
@@ -203,12 +205,12 @@ const Navbar = () => {
                         {user?.name}
                       </span>
                       <span className="ml-1 px-2 py-0.5 bg-rental-100 dark:bg-rental-900 text-rental-700 dark:text-rental-300 rounded-full text-xs">
-                        {user?.role === 'admin' ? 'Admin' : 'Utilisateur'}
+                        {user?.role === 'admin' ? t('admin') : t('user')}
                       </span>
                     </div>
                     <Button variant="outline" size="sm" className="flex items-center justify-center w-full" onClick={handleLogout}>
                       <LogOut className="h-4 w-4 mr-2" />
-                      Déconnexion
+                      {t('logout')}
                     </Button>
                   </>
                 ) : (
@@ -216,11 +218,11 @@ const Navbar = () => {
                     <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
                       <Button variant="outline" size="sm" className="flex items-center justify-center w-full">
                         <User className="h-4 w-4 mr-2" />
-                        Connexion
+                        {t('login')}
                       </Button>
                     </Link>
                     <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
-                      <Button className="w-full bg-rental-600 hover:bg-rental-700 dark:bg-rental-500 dark:hover:bg-rental-600">S'inscrire</Button>
+                      <Button className="w-full bg-rental-600 hover:bg-rental-700 dark:bg-rental-500 dark:hover:bg-rental-600">{t('signup')}</Button>
                     </Link>
                   </>
                 )}

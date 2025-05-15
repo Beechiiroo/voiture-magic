@@ -1,9 +1,11 @@
 
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import CarCard from "./CarCard";
+import { useTranslation } from "@/hooks/use-translation";
 
 // Updated car data with Tunisian cities
 const cars = [
@@ -80,6 +82,7 @@ const FeaturedCars = () => {
   const [activeCategory, setActiveCategory] = useState("Tous");
   const [visibleCars, setVisibleCars] = useState(cars);
   const [favorites, setFavorites] = useState<string[]>([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Load favorites from localStorage if available
@@ -110,10 +113,11 @@ const FeaturedCars = () => {
       
       // Show toast notification
       toast({
-        title: prev.includes(id) ? "Retiré des favoris" : "Ajouté aux favoris",
+        title: prev.includes(id) ? t("removedFromFavorites") : t("addedToFavorites"),
         description: prev.includes(id) 
-          ? "Le véhicule a été retiré de vos favoris" 
-          : "Le véhicule a été ajouté à vos favoris",
+          ? t("removedFromFavoritesDescription") 
+          : t("addedToFavoritesDescription"),
+        variant: prev.includes(id) ? "default" : "success",
       });
       
       return newFavorites;
@@ -139,47 +143,49 @@ const FeaturedCars = () => {
     const car = cars.find(car => car.id === id);
     if (car) {
       toast({
-        title: `Disponibilité mise à jour`,
-        description: `${car.name} est maintenant ${!car.available ? 'disponible' : 'indisponible'}`,
+        title: t("availabilityUpdated"),
+        description: car.available 
+          ? t("vehicleNowUnavailable", { car: car.name })
+          : t("vehicleNowAvailable", { car: car.name }),
+        variant: "success",
       });
     }
   };
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 bg-gray-50 dark:bg-gray-900">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <motion.h2 
-            className="text-3xl font-bold mb-4 text-rental-900 font-heading"
+            className="text-3xl font-bold mb-4 text-rental-900 dark:text-rental-100 font-heading"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            Nos Véhicules <span className="text-rental-600">Premium</span>
+            {t("ourPremiumVehicles")} <span className="text-rental-600">{t("premium")}</span>
           </motion.h2>
           <motion.p 
-            className="text-gray-600 max-w-2xl mx-auto"
+            className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            Découvrez notre sélection de véhicules de haute qualité pour tous vos besoins et budgets.
-            Nous offrons une large gamme de voitures pour répondre à toutes vos exigences.
+            {t("featuredCarsDescription")}
           </motion.p>
         </div>
 
         <div className="mb-8 flex justify-center">
-          <div className="bg-white rounded-full shadow-md p-1 flex">
+          <div className="bg-white dark:bg-gray-800 rounded-full shadow-md p-1 flex overflow-x-auto">
             {categories.map((category) => (
               <Button
                 key={category}
                 onClick={() => handleCategoryChange(category)}
                 variant={activeCategory === category ? "default" : "ghost"}
                 className={`rounded-full px-6 ${
-                  activeCategory === category ? "bg-rental-600 text-white" : "text-gray-700"
+                  activeCategory === category ? "bg-rental-600 text-white" : "text-gray-700 dark:text-gray-300"
                 }`}
               >
-                {category}
+                {t(category.toLowerCase())}
               </Button>
             ))}
           </div>
@@ -187,20 +193,31 @@ const FeaturedCars = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {visibleCars.map((car) => (
-            <CarCard 
-              key={car.id} 
-              car={car} 
-              isFavorite={favorites.includes(car.id)}
-              onToggleFavorite={() => toggleFavorite(car.id)}
-              onToggleAvailability={() => toggleAvailability(car.id)}
-            />
+            <div key={car.id}>
+              <Link to={`/voitures/${car.id}`} className="block">
+                <CarCard 
+                  car={car} 
+                  isFavorite={favorites.includes(car.id)}
+                  onToggleFavorite={(e) => {
+                    e.preventDefault(); // Prevent navigation when clicking on favorite button
+                    toggleFavorite(car.id);
+                  }}
+                  onToggleAvailability={(e) => {
+                    e.preventDefault(); // Prevent navigation when clicking on availability toggle
+                    toggleAvailability(car.id);
+                  }}
+                />
+              </Link>
+            </div>
           ))}
         </div>
 
         <div className="text-center mt-12">
-          <Button variant="outline" className="border-rental-600 text-rental-600 hover:bg-rental-600 hover:text-white">
-            Voir tous les véhicules
-          </Button>
+          <Link to="/voitures">
+            <Button variant="outline" className="border-rental-600 text-rental-600 hover:bg-rental-600 hover:text-white">
+              {t("viewAllVehicles")}
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

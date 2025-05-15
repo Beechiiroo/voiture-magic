@@ -1,8 +1,11 @@
 
 import { Link } from "react-router-dom";
 import { Car, Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from "lucide-react";
+import { useTranslation } from "@/hooks/use-translation";
 
 const Footer = () => {
+  const { t } = useTranslation();
+  
   return (
     <footer className="bg-rental-900 text-white pt-16 pb-8">
       <div className="container mx-auto px-4">
@@ -13,7 +16,7 @@ const Footer = () => {
               <span className="text-2xl font-bold">CarRental<span className="text-rental-400">Pro</span></span>
             </div>
             <p className="text-gray-400 mb-6">
-              Votre partenaire de confiance pour la location de véhicules de qualité supérieure. Notre mission est de vous offrir la meilleure expérience de location possible.
+              {t("footerDescription")}
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-rental-400 transition-colors">
@@ -32,55 +35,55 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3 className="text-xl font-bold mb-4">Liens rapides</h3>
+            <h3 className="text-xl font-bold mb-4">{t("quickLinks")}</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-gray-400 hover:text-rental-400 transition-colors">Accueil</Link>
+                <Link to="/" className="text-gray-400 hover:text-rental-400 transition-colors">{t("home")}</Link>
               </li>
               <li>
-                <Link to="/voitures" className="text-gray-400 hover:text-rental-400 transition-colors">Nos Véhicules</Link>
+                <Link to="/voitures" className="text-gray-400 hover:text-rental-400 transition-colors">{t("cars")}</Link>
               </li>
               <li>
-                <Link to="/reservations" className="text-gray-400 hover:text-rental-400 transition-colors">Réservations</Link>
+                <Link to="/reservations" className="text-gray-400 hover:text-rental-400 transition-colors">{t("reservations")}</Link>
               </li>
               <li>
-                <Link to="/contact" className="text-gray-400 hover:text-rental-400 transition-colors">Contact</Link>
+                <Link to="/contact" className="text-gray-400 hover:text-rental-400 transition-colors">{t("contact")}</Link>
               </li>
               <li>
                 <Link to="/faq" className="text-gray-400 hover:text-rental-400 transition-colors">FAQ</Link>
               </li>
               <li>
-                <Link to="/conditions" className="text-gray-400 hover:text-rental-400 transition-colors">Conditions Générales</Link>
+                <Link to="/conditions" className="text-gray-400 hover:text-rental-400 transition-colors">{t("termsOfService")}</Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-xl font-bold mb-4">Catégories</h3>
+            <h3 className="text-xl font-bold mb-4">{t("categories")}</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/voitures?category=berline" className="text-gray-400 hover:text-rental-400 transition-colors">Berlines</Link>
+                <Link to="/voitures?category=berline" className="text-gray-400 hover:text-rental-400 transition-colors">{t("sedan")}</Link>
               </li>
               <li>
-                <Link to="/voitures?category=suv" className="text-gray-400 hover:text-rental-400 transition-colors">SUVs</Link>
+                <Link to="/voitures?category=suv" className="text-gray-400 hover:text-rental-400 transition-colors">{t("suv")}</Link>
               </li>
               <li>
-                <Link to="/voitures?category=electrique" className="text-gray-400 hover:text-rental-400 transition-colors">Électriques</Link>
+                <Link to="/voitures?category=electrique" className="text-gray-400 hover:text-rental-400 transition-colors">{t("electric")}</Link>
               </li>
               <li>
-                <Link to="/voitures?category=luxe" className="text-gray-400 hover:text-rental-400 transition-colors">Voitures de Luxe</Link>
+                <Link to="/voitures?category=luxe" className="text-gray-400 hover:text-rental-400 transition-colors">{t("luxury")}</Link>
               </li>
               <li>
-                <Link to="/voitures?category=economique" className="text-gray-400 hover:text-rental-400 transition-colors">Économiques</Link>
+                <Link to="/voitures?category=economique" className="text-gray-400 hover:text-rental-400 transition-colors">{t("economic")}</Link>
               </li>
               <li>
-                <Link to="/voitures?category=utilitaire" className="text-gray-400 hover:text-rental-400 transition-colors">Utilitaires</Link>
+                <Link to="/voitures?category=utilitaire" className="text-gray-400 hover:text-rental-400 transition-colors">{t("utility")}</Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-xl font-bold mb-4">Contact</h3>
+            <h3 className="text-xl font-bold mb-4">{t("contact")}</h3>
             <ul className="space-y-4">
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 text-rental-400 mr-2 mt-1" />
@@ -101,12 +104,12 @@ const Footer = () => {
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-500 mb-4 md:mb-0">
-              &copy; {new Date().getFullYear()} CarRentalPro. Tous droits réservés.
+              &copy; {new Date().getFullYear()} CarRentalPro. {t("allRightsReserved")}
             </p>
             <div className="flex space-x-6">
-              <Link to="/confidentialite" className="text-gray-500 hover:text-rental-400 transition-colors">Politique de confidentialité</Link>
-              <Link to="/conditions" className="text-gray-500 hover:text-rental-400 transition-colors">Conditions d'utilisation</Link>
-              <Link to="/cookies" className="text-gray-500 hover:text-rental-400 transition-colors">Gestion des cookies</Link>
+              <Link to="/confidentialite" className="text-gray-500 hover:text-rental-400 transition-colors">{t("privacyPolicy")}</Link>
+              <Link to="/conditions" className="text-gray-500 hover:text-rental-400 transition-colors">{t("termsOfService")}</Link>
+              <Link to="/cookies" className="text-gray-500 hover:text-rental-400 transition-colors">{t("cookiePolicy")}</Link>
             </div>
           </div>
         </div>
