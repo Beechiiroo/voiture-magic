@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -198,14 +197,8 @@ const FeaturedCars = () => {
                 <CarCard 
                   car={car} 
                   isFavorite={favorites.includes(car.id)}
-                  onToggleFavorite={(e) => {
-                    e.preventDefault(); // Prevent navigation when clicking on favorite button
-                    toggleFavorite(car.id);
-                  }}
-                  onToggleAvailability={(e) => {
-                    e.preventDefault(); // Prevent navigation when clicking on availability toggle
-                    toggleAvailability(car.id);
-                  }}
+                  onToggleFavorite={() => toggleFavorite(car.id)}
+                  onToggleAvailability={() => toggleAvailability(car.id)}
                 />
               </Link>
             </div>

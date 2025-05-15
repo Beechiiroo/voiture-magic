@@ -223,7 +223,7 @@ const translations: Record<string, Record<string, string>> = {
     "sessionLength": "Session",
     "year": "an",
     "years": "ans",
-    "contactCookiesText": "Si vous avez des questions concernant notre politique de cookies, veuillez nous contacter par email à contact@carrentalpro.fr ou par téléphone au +33 1 23 45 67 89.",
+    "contactCookiesText": "Si vous avez des questions concernant notre politique de cookies, veuillez nous contacter par email à contact@carrentalpro.fr ou par téléphone au +33 1 23 45 67 89."
   },
   en: {
     // Navigation
@@ -422,7 +422,7 @@ const translations: Record<string, Record<string, string>> = {
     "sessionLength": "Session",
     "year": "year",
     "years": "years",
-    "contactCookiesText": "If you have any questions about our Cookie Policy, please contact us by email at contact@carrentalpro.fr or by phone at +33 1 23 45 67 89.",
+    "contactCookiesText": "If you have any questions about our Cookie Policy, please contact us by email at contact@carrentalpro.fr or by phone at +33 1 23 45 67 89."
   },
   ar: {
     // Navigation
@@ -492,7 +492,7 @@ const translations: Record<string, Record<string, string>> = {
     // Basic translations for policy pages
     "privacyPolicy": "سياسة الخصوصية",
     "termsOfService": "شروط الخدمة",
-    "cookiePolicy": "سياسة ملفات تعريف الارتباط",
+    "cookiePolicy": "سياسة ملفات تعريف الارتباط"
   },
   it: {
     // Navigation
@@ -562,7 +562,7 @@ const translations: Record<string, Record<string, string>> = {
     // Basic translations for policy pages
     "privacyPolicy": "Informativa sulla Privacy",
     "termsOfService": "Termini di Servizio",
-    "cookiePolicy": "Politica dei Cookie",
+    "cookiePolicy": "Politica dei Cookie"
   }
 };
 
