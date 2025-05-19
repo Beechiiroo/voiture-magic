@@ -195,7 +195,7 @@ const translations: Record<string, Record<string, string>> = {
     "contactTermsText": "Si vous avez des questions concernant ces conditions d'utilisation, veuillez nous contacter par email à contact@carrentalpro.fr ou par téléphone au +33 1 23 45 67 89.",
     
     // Cookie policy sections
-    "cookiePolicy": "Politique de cookies",
+    "cookieIntroTitle": "Introduction aux cookies",
     "whatAreCookiesTitle": "Que sont les cookies ?",
     "whatAreCookiesText": "Les cookies sont de petits fichiers texte placés sur votre appareil lorsque vous visitez un site web. Ils sont largement utilisés pour faire fonctionner les sites web ou les rendre plus efficaces, ainsi que pour fournir des informations aux propriétaires du site.",
     "cookieTypesTitle": "Types de cookies que nous utilisons",
@@ -393,7 +393,7 @@ const translations: Record<string, Record<string, string>> = {
     "contactTermsText": "If you have any questions about these Terms of Service, please contact us by email at contact@carrentalpro.fr or by phone at +33 1 23 45 67 89.",
     
     // Cookie policy sections
-    "cookiePolicy": "Cookie Policy",
+    "cookieIntroTitle": "Introduction to Cookies",
     "whatAreCookiesTitle": "What Are Cookies",
     "whatAreCookiesText": "Cookies are small text files that are placed on your device when you visit a website. They are widely used to make websites work or work more efficiently, as well as to provide information to the site owners.",
     "cookieTypesTitle": "Types of Cookies We Use",
@@ -637,4 +637,3 @@ export const useTranslation = () => {
   }
   return context;
 };
-
