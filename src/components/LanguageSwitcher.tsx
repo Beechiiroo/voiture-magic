@@ -13,7 +13,7 @@ import { toast } from "@/hooks/use-toast";
 const LanguageSwitcher = () => {
   const { language, setLanguage, t } = useTranslation();
 
-  const changeLanguage = (lang: typeof language) => {
+  const changeLanguage = (lang: typeof availableLanguages[0]) => {
     setLanguage(lang);
     toast({
       title: t("languageChanged"),

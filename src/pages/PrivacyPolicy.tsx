@@ -1,79 +1,132 @@
 
-import { motion } from "framer-motion";
+import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Separator } from "@/components/ui/separator";
 import { useTranslation } from "@/hooks/use-translation";
+import { motion } from "framer-motion";
 
-export default function PrivacyPolicy() {
+const PrivacyPolicy = () => {
   const { t } = useTranslation();
   
   return (
-    <>
+    <div className="min-h-screen bg-white dark:bg-gray-950">
       <Navbar />
-      <div className="container mx-auto px-4 py-24">
+      
+      <main className="container mx-auto px-4 py-16 max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md p-8"
+          transition={{ duration: 0.5 }}
+          className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-8"
         >
-          <h1 className="text-3xl font-bold mb-6">{t("privacyPolicy")}</h1>
+          <h1 className="text-3xl font-bold text-rental-900 dark:text-rental-100 mb-6">
+            {t("privacyPolicyTitle")}
+          </h1>
           
-          <div className="prose dark:prose-invert max-w-none">
-            <p className="mb-4">
-              {t("privacyPolicyLastUpdated")} {t("date", { date: new Date() })}
+          <Separator className="my-6" />
+          
+          {/* Introduction */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-rental-800 dark:text-rental-200 mb-4">
+              {t("privacyIntroTitle")}
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {t("privacyIntroText")}
             </p>
-            
-            <h2 className="text-xl font-bold mt-8 mb-4">{t("privacyIntroTitle")}</h2>
-            <p>{t("privacyIntroText")}</p>
-            
-            <h2 className="text-xl font-bold mt-8 mb-4">{t("dataCollectionTitle")}</h2>
-            <p>{t("dataCollectionText")}</p>
-            
-            <h3 className="text-lg font-semibold mt-6 mb-2">{t("personalDataTitle")}</h3>
-            <p>{t("personalDataText")}</p>
-            <ul className="list-disc pl-5 my-4">
-              <li>{t("personalDataName")}</li>
-              <li>{t("personalDataEmail")}</li>
-              <li>{t("personalDataPhone")}</li>
-              <li>{t("personalDataAddress")}</li>
-              <li>{t("personalDataPayment")}</li>
-            </ul>
-            
-            <h3 className="text-lg font-semibold mt-6 mb-2">{t("usageDataTitle")}</h3>
-            <p>{t("usageDataText")}</p>
-            
-            <h2 className="text-xl font-bold mt-8 mb-4">{t("dataUseTitle")}</h2>
-            <p>{t("dataUseText")}</p>
-            <ul className="list-disc pl-5 my-4">
-              <li>{t("dataUseProvideService")}</li>
-              <li>{t("dataUseImproveService")}</li>
-              <li>{t("dataUseCommunicate")}</li>
-              <li>{t("dataUseLegal")}</li>
-            </ul>
-            
-            <h2 className="text-xl font-bold mt-8 mb-4">{t("dataSharingTitle")}</h2>
-            <p>{t("dataSharingText")}</p>
-            
-            <h2 className="text-xl font-bold mt-8 mb-4">{t("dataSecurityTitle")}</h2>
-            <p>{t("dataSecurityText")}</p>
-            
-            <h2 className="text-xl font-bold mt-8 mb-4">{t("yourRightsTitle")}</h2>
-            <p>{t("yourRightsText")}</p>
-            <ul className="list-disc pl-5 my-4">
-              <li>{t("rightsAccess")}</li>
-              <li>{t("rightsRectification")}</li>
-              <li>{t("rightsDeletion")}</li>
-              <li>{t("rightsRestriction")}</li>
-              <li>{t("rightsPortability")}</li>
-              <li>{t("rightsObjection")}</li>
-            </ul>
-            
-            <h2 className="text-xl font-bold mt-8 mb-4">{t("contactTitle")}</h2>
-            <p>{t("contactText")}</p>
+          </section>
+          
+          {/* Data Collection */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-rental-800 dark:text-rental-200 mb-4">
+              {t("dataCollectionTitle")}
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {t("dataCollectionText")}
+            </p>
+          </section>
+          
+          {/* Data Use */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-rental-800 dark:text-rental-200 mb-4">
+              {t("dataUseTitle")}
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {t("dataUseText")}
+            </p>
+          </section>
+          
+          {/* Data Sharing */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-rental-800 dark:text-rental-200 mb-4">
+              {t("dataSharingTitle")}
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {t("dataSharingText")}
+            </p>
+          </section>
+          
+          {/* Data Protection */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-rental-800 dark:text-rental-200 mb-4">
+              {t("dataProtectionTitle")}
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {t("dataProtectionText")}
+            </p>
+          </section>
+          
+          {/* Cookies */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-rental-800 dark:text-rental-200 mb-4">
+              {t("cookiesTitle")}
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {t("cookiesText")}
+            </p>
+          </section>
+          
+          {/* Third Party Services */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-rental-800 dark:text-rental-200 mb-4">
+              {t("thirdPartyTitle")}
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {t("thirdPartyText")}
+            </p>
+          </section>
+          
+          {/* User Rights */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-rental-800 dark:text-rental-200 mb-4">
+              {t("userRightsTitle")}
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {t("userRightsText")}
+            </p>
+          </section>
+          
+          {/* Contact */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-rental-800 dark:text-rental-200 mb-4">
+              {t("contactPrivacyTitle")}
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {t("contactPrivacyText")}
+            </p>
+          </section>
+          
+          <Separator className="my-6" />
+          
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            {t("lastUpdated")}: 01/04/2024
           </div>
         </motion.div>
-      </div>
+      </main>
+      
       <Footer />
-    </>
+    </div>
   );
-}
+};
+
+export default PrivacyPolicy;

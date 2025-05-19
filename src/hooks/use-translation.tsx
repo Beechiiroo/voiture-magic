@@ -1,14 +1,24 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// Types for available languages
-export type Language = 'fr' | 'en';
+// Type for language object
+export interface LanguageOption {
+  code: 'fr' | 'en';
+  name: string;
+  flag: string;
+}
+
+// Export available languages
+export const availableLanguages: LanguageOption[] = [
+  { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  { code: 'en', name: 'English', flag: '🇬🇧' },
+];
 
 // Type for the translation context
 interface TranslationContextType {
-  language: Language;
-  setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
+  language: LanguageOption;
+  setLanguage: (lang: LanguageOption) => void;
+  t: (key: string, params?: Record<string, string | number>) => string;
 }
 
 // Create the context
@@ -75,7 +85,29 @@ const frTranslations: Record<string, string> = {
   "profileUpdatedTitle": "Profil mis à jour",
   "profileUpdatedDesc": "Vos informations ont été mises à jour avec succès.",
   "profilePrivacyNotice": "Vos informations personnelles sont protégées par notre politique de confidentialité.",
-
+  
+  // Added translations for favorites
+  "addedToFavorites": "Ajouté aux favoris",
+  "addedToFavoritesDescription": "Le véhicule a été ajouté à vos favoris",
+  "removedFromFavorites": "Retiré des favoris",
+  "removedFromFavoritesDescription": "Le véhicule a été retiré de vos favoris",
+  "availabilityUpdated": "Disponibilité mise à jour",
+  "vehicleNowUnavailable": "Le véhicule {car} n'est plus disponible",
+  "vehicleNowAvailable": "Le véhicule {car} est maintenant disponible",
+  
+  // Car categories
+  "tous": "Tous",
+  "berline": "Berline",
+  "suv": "SUV", 
+  "électrique": "Électrique",
+  "sport": "Sport",
+  "premium": "Premium",
+  
+  // Featured cars section 
+  "ourPremiumVehicles": "Notre Flotte",
+  "featuredCarsDescription": "Découvrez notre sélection de véhicules haut de gamme pour tous vos besoins",
+  "viewAllVehicles": "Voir tous les véhicules",
+  
   // Home page
   "heroTitle": "Location de voitures professionnelle",
   "heroSubtitle": "Découvrez notre flotte de véhicules de qualité pour tous vos besoins de déplacement.",
@@ -307,7 +339,9 @@ const frTranslations: Record<string, string> = {
   "receiveSMS": "Recevoir des SMS",
   "marketingCommunications": "Communications marketing",
   "saveSettings": "Enregistrer les paramètres",
-  "settingsSaved": "Paramètres enregistrés avec succès."
+  "settingsSaved": "Paramètres enregistrés avec succès.",
+  "languageChanged": "Langue modifiée",
+  "languageChangedTo": "La langue a été changée en {language}"
 };
 
 // English translations
@@ -371,6 +405,28 @@ const enTranslations: Record<string, string> = {
   "profileUpdatedTitle": "Profile Updated",
   "profileUpdatedDesc": "Your information has been successfully updated.",
   "profilePrivacyNotice": "Your personal information is protected by our privacy policy.",
+  
+  // Added translations for favorites
+  "addedToFavorites": "Added to favorites",
+  "addedToFavoritesDescription": "The vehicle has been added to your favorites",
+  "removedFromFavorites": "Removed from favorites",
+  "removedFromFavoritesDescription": "The vehicle has been removed from your favorites",
+  "availabilityUpdated": "Availability updated",
+  "vehicleNowUnavailable": "Vehicle {car} is now unavailable",
+  "vehicleNowAvailable": "Vehicle {car} is now available",
+  
+  // Car categories
+  "tous": "All",
+  "berline": "Sedan",
+  "suv": "SUV", 
+  "électrique": "Electric",
+  "sport": "Sport",
+  "premium": "Premium",
+  
+  // Featured cars section 
+  "ourPremiumVehicles": "Our Fleet",
+  "featuredCarsDescription": "Discover our selection of premium vehicles for all your needs",
+  "viewAllVehicles": "View all vehicles",
   
   // Home page
   "heroTitle": "Professional Car Rental",
@@ -603,31 +659,47 @@ const enTranslations: Record<string, string> = {
   "receiveSMS": "Receive SMS",
   "marketingCommunications": "Marketing Communications",
   "saveSettings": "Save Settings",
-  "settingsSaved": "Settings saved successfully."
+  "settingsSaved": "Settings saved successfully.",
+  "languageChanged": "Language changed",
+  "languageChangedTo": "Language has been changed to {language}"
+};
+
+// Helper function to replace parameters in translation strings
+const replaceParams = (text: string, params?: Record<string, string | number>): string => {
+  if (!params) return text;
+  
+  return Object.entries(params).reduce((result, [key, value]) => {
+    return result.replace(new RegExp(`\\{${key}\\}`, 'g'), String(value));
+  }, text);
 };
 
 // TranslationProvider component
 export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>('fr');
+  // Default to the first language
+  const [language, setLanguage] = useState<LanguageOption>(availableLanguages[0]);
 
   // Effect to load the language from localStorage on mount
   useEffect(() => {
-    const storedLanguage = localStorage.getItem('language') as Language;
-    if (storedLanguage && (storedLanguage === 'fr' || storedLanguage === 'en')) {
-      setLanguage(storedLanguage);
+    const storedLanguageCode = localStorage.getItem('language');
+    if (storedLanguageCode) {
+      const foundLanguage = availableLanguages.find(lang => lang.code === storedLanguageCode);
+      if (foundLanguage) {
+        setLanguage(foundLanguage);
+      }
     }
   }, []);
 
   // Function to change language and save to localStorage
-  const changeLanguage = (lang: Language) => {
+  const changeLanguage = (lang: LanguageOption) => {
     setLanguage(lang);
-    localStorage.setItem('language', lang);
+    localStorage.setItem('language', lang.code);
   };
 
-  // Function to get translation
-  const t = (key: string): string => {
-    const translations = language === 'fr' ? frTranslations : enTranslations;
-    return translations[key] || key;
+  // Function to get translation with optional parameter replacement
+  const t = (key: string, params?: Record<string, string | number>): string => {
+    const translations = language.code === 'fr' ? frTranslations : enTranslations;
+    const translation = translations[key] || key;
+    return replaceParams(translation, params);
   };
 
   // Context value

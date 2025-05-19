@@ -1,71 +1,132 @@
 
-import { motion } from "framer-motion";
+import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Separator } from "@/components/ui/separator";
 import { useTranslation } from "@/hooks/use-translation";
+import { motion } from "framer-motion";
 
-export default function TermsOfService() {
+const TermsOfService = () => {
   const { t } = useTranslation();
   
   return (
-    <>
+    <div className="min-h-screen bg-white dark:bg-gray-950">
       <Navbar />
-      <div className="container mx-auto px-4 py-24">
+      
+      <main className="container mx-auto px-4 py-16 max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md p-8"
+          transition={{ duration: 0.5 }}
+          className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-8"
         >
-          <h1 className="text-3xl font-bold mb-6">{t("termsOfService")}</h1>
+          <h1 className="text-3xl font-bold text-rental-900 dark:text-rental-100 mb-6">
+            {t("termsTitle")}
+          </h1>
           
-          <div className="prose dark:prose-invert max-w-none">
-            <p className="mb-4">
-              {t("termsLastUpdated")} {t("date", { date: new Date() })}
+          <Separator className="my-6" />
+          
+          {/* Introduction */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-rental-800 dark:text-rental-200 mb-4">
+              {t("termsIntroTitle")}
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {t("termsIntroText")}
             </p>
-            
-            <h2 className="text-xl font-bold mt-8 mb-4">{t("termsIntroTitle")}</h2>
-            <p>{t("termsIntroText")}</p>
-            
-            <h2 className="text-xl font-bold mt-8 mb-4">{t("definitionsTitle")}</h2>
-            <p>{t("definitionsText")}</p>
-            <ul className="list-disc pl-5 my-4">
-              <li><strong>{t("definitionService")}</strong>: {t("definitionServiceText")}</li>
-              <li><strong>{t("definitionCompany")}</strong>: {t("definitionCompanyText")}</li>
-              <li><strong>{t("definitionUser")}</strong>: {t("definitionUserText")}</li>
-              <li><strong>{t("definitionVehicle")}</strong>: {t("definitionVehicleText")}</li>
-              <li><strong>{t("definitionRental")}</strong>: {t("definitionRentalText")}</li>
-            </ul>
-            
-            <h2 className="text-xl font-bold mt-8 mb-4">{t("accountTitle")}</h2>
-            <p>{t("accountText")}</p>
-            <p>{t("accountResponsibility")}</p>
-            
-            <h2 className="text-xl font-bold mt-8 mb-4">{t("rentalProcessTitle")}</h2>
-            <p>{t("rentalProcessText")}</p>
-            <h3 className="text-lg font-semibold mt-6 mb-2">{t("reservationsTitle")}</h3>
-            <p>{t("reservationsText")}</p>
-            <h3 className="text-lg font-semibold mt-6 mb-2">{t("paymentTitle")}</h3>
-            <p>{t("paymentText")}</p>
-            <h3 className="text-lg font-semibold mt-6 mb-2">{t("cancellationTitle")}</h3>
-            <p>{t("cancellationText")}</p>
-            
-            <h2 className="text-xl font-bold mt-8 mb-4">{t("vehicleUseTitle")}</h2>
-            <p>{t("vehicleUseText")}</p>
-            <h3 className="text-lg font-semibold mt-6 mb-2">{t("prohibitedUsesTitle")}</h3>
-            <p>{t("prohibitedUsesText")}</p>
-            
-            <h2 className="text-xl font-bold mt-8 mb-4">{t("liabilityTitle")}</h2>
-            <p>{t("liabilityText")}</p>
-            
-            <h2 className="text-xl font-bold mt-8 mb-4">{t("changesTitle")}</h2>
-            <p>{t("changesText")}</p>
-            
-            <h2 className="text-xl font-bold mt-8 mb-4">{t("contactTitle")}</h2>
-            <p>{t("contactTermsText")}</p>
+          </section>
+          
+          {/* User Accounts */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-rental-800 dark:text-rental-200 mb-4">
+              {t("accountTermsTitle")}
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {t("accountTermsText")}
+            </p>
+          </section>
+          
+          {/* Bookings and Payments */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-rental-800 dark:text-rental-200 mb-4">
+              {t("bookingTermsTitle")}
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {t("bookingTermsText")}
+            </p>
+          </section>
+          
+          {/* Cancellations and Refunds */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-rental-800 dark:text-rental-200 mb-4">
+              {t("cancellationTermsTitle")}
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {t("cancellationTermsText")}
+            </p>
+          </section>
+          
+          {/* Limitation of Liability */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-rental-800 dark:text-rental-200 mb-4">
+              {t("liabilityTermsTitle")}
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {t("liabilityTermsText")}
+            </p>
+          </section>
+          
+          {/* Intellectual Property */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-rental-800 dark:text-rental-200 mb-4">
+              {t("intellectualPropertyTermsTitle")}
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {t("intellectualPropertyTermsText")}
+            </p>
+          </section>
+          
+          {/* Dispute Resolution */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-rental-800 dark:text-rental-200 mb-4">
+              {t("disputeTermsTitle")}
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {t("disputeTermsText")}
+            </p>
+          </section>
+          
+          {/* Modifications to Terms */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-rental-800 dark:text-rental-200 mb-4">
+              {t("modificationTermsTitle")}
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {t("modificationTermsText")}
+            </p>
+          </section>
+          
+          {/* Contact */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-rental-800 dark:text-rental-200 mb-4">
+              {t("contactTermsTitle")}
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {t("contactTermsText")}
+            </p>
+          </section>
+          
+          <Separator className="my-6" />
+          
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            {t("lastUpdated")}: 01/04/2024
           </div>
         </motion.div>
-      </div>
+      </main>
+      
       <Footer />
-    </>
+    </div>
   );
-}
+};
+
+export default TermsOfService;

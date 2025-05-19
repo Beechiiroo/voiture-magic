@@ -1,149 +1,105 @@
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail } from "lucide-react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { motion } from "framer-motion";
 import { useTranslation } from "@/hooks/use-translation";
 import { toast } from "@/hooks/use-toast";
 
-const formSchema = z.object({
-  email: z.string().email(),
-});
-
-export default function ForgotPassword() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isEmailSent, setIsEmailSent] = useState(false);
+const ForgotPassword = () => {
+  const [email, setEmail] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const { t } = useTranslation();
-  
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-    },
-  });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setIsSubmitting(true);
-    
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    // Simulate an API call
     try {
-      // In a real application, this would call an API to send a password reset email
-      console.log("Sending password reset email to:", values.email);
-      
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      setIsEmailSent(true);
       toast({
-        title: t("passwordResetEmailSent"),
-        description: t("passwordResetInstructions", { email: values.email }),
+        title: t("resetPasswordSent"),
+        description: `${t("resetPasswordInstructions")} ${email}`,
         variant: "success",
       });
+      
+      setEmail("");
     } catch (error) {
       toast({
-        title: t("passwordResetError"),
-        description: t("passwordResetErrorMessage"),
+        title: t("error"),
+        description: t("resetPasswordError"),
         variant: "destructive",
       });
     } finally {
-      setIsSubmitting(false);
+      setSubmitting(false);
     }
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Navbar />
-      <div className="container mx-auto px-4 py-32">
+      
+      <main className="container mx-auto px-4 py-16 flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md p-8"
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-md"
         >
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold">{t("forgotPassword")}</h1>
-            {!isEmailSent ? (
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl p-8">
+            <div className="text-center mb-8">
+              <h1 className="text-2xl font-bold text-rental-900 dark:text-rental-100">
+                {t("resetPasswordTitle")}
+              </h1>
               <p className="text-gray-600 dark:text-gray-400 mt-2">
-                {t("forgotPasswordDescription")}
+                {t("resetPasswordSubtitle")}
               </p>
-            ) : (
-              <p className="text-green-600 dark:text-green-400 mt-2">
-                {t("passwordResetEmailSentDescription")}
-              </p>
-            )}
-          </div>
-
-          {!isEmailSent ? (
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("email")}</FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                          <Input
-                            {...field}
-                            placeholder="email@example.com"
-                            className="pl-10"
-                            type="email"
-                          />
-                        </div>
-                      </FormControl>
-                      <FormDescription>{t("passwordResetEmailInfo")}</FormDescription>
-                    </FormItem>
-                  )}
-                />
-
-                <div className="flex flex-col space-y-4">
-                  <Button 
-                    type="submit" 
-                    className="w-full bg-rental-600 hover:bg-rental-700" 
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? t("sending") : t("sendResetLink")}
-                  </Button>
-                  <div className="text-center">
-                    <a 
-                      href="/login" 
-                      className="text-rental-600 hover:text-rental-700 text-sm font-medium"
-                    >
-                      {t("backToLogin")}
-                    </a>
-                  </div>
-                </div>
-              </form>
-            </Form>
-          ) : (
-            <div className="flex flex-col space-y-4">
-              <Button 
-                onClick={() => setIsEmailSent(false)} 
-                variant="outline" 
-                className="w-full"
-              >
-                {t("tryAnotherEmail")}
-              </Button>
-              <div className="text-center">
-                <a 
-                  href="/login" 
-                  className="text-rental-600 hover:text-rental-700 text-sm font-medium"
-                >
-                  {t("backToLogin")}
-                </a>
-              </div>
             </div>
-          )}
+            
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="email">{t("email")}</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="example@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full"
+                />
+              </div>
+              
+              <Button 
+                type="submit" 
+                className="w-full bg-rental-600 hover:bg-rental-700"
+                disabled={submitting}
+              >
+                {submitting ? t("loading") : t("resetPasswordTitle")}
+              </Button>
+            </form>
+            
+            <div className="text-center mt-6">
+              <Link 
+                to="/login" 
+                className="text-sm text-rental-600 hover:text-rental-700 dark:text-rental-400 dark:hover:text-rental-300"
+              >
+                {t("backToLogin")}
+              </Link>
+            </div>
+          </div>
         </motion.div>
-      </div>
+      </main>
+      
       <Footer />
-    </>
+    </div>
   );
-}
+};
+
+export default ForgotPassword;

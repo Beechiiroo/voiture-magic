@@ -54,7 +54,7 @@ const UserMenu = () => {
               {user.email}
             </p>
             <span className="mt-1 inline-flex items-center rounded-full bg-rental-100 dark:bg-rental-900 px-2.5 py-0.5 text-xs font-medium text-rental-800 dark:text-rental-300">
-              {user.role === 'admin' ? t('admin') : t('user')}
+              {user.role === 'admin' ? t("admin") : t("user")}
             </span>
           </div>
         </DropdownMenuLabel>
@@ -62,19 +62,19 @@ const UserMenu = () => {
         <Link to="/profile">
           <DropdownMenuItem className="cursor-pointer">
             <User className="mr-2 h-4 w-4" />
-            <span>{t('profile')}</span>
+            <span>{t("profile")}</span>
           </DropdownMenuItem>
         </Link>
         <Link to="/settings">
           <DropdownMenuItem className="cursor-pointer">
             <Settings className="mr-2 h-4 w-4" />
-            <span>{t('settings')}</span>
+            <span>{t("settings")}</span>
           </DropdownMenuItem>
         </Link>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={logout} className="cursor-pointer text-red-600 dark:text-red-400 focus:bg-red-50 dark:focus:bg-red-950">
           <LogOut className="mr-2 h-4 w-4" />
-          <span>{t('logout')}</span>
+          <span>{t("logout")}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
