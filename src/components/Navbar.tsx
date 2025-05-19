@@ -2,9 +2,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Car, Menu, X, User, LogOut } from "lucide-react";
+import { Car, Menu, X, User } from "lucide-react";
 import ThemeSwitcher from './ThemeSwitcher';
 import LanguageSwitcher from './LanguageSwitcher';
+import UserMenu from './UserMenu';
 import { useUser } from '@/context/UserContext';
 import { useTranslation } from '@/hooks/use-translation';
 
@@ -12,7 +13,7 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
-  const { user, isLoggedIn, logout } = useUser();
+  const { isLoggedIn } = useUser();
   const { t } = useTranslation();
 
   const toggleMobileMenu = () => {
@@ -35,11 +36,6 @@ const Navbar = () => {
   }, []);
 
   const isActive = (path: string) => location.pathname === path;
-
-  const handleLogout = () => {
-    logout();
-    setMobileMenuOpen(false);
-  };
 
   return (
     <nav className={`bg-white dark:bg-gray-900 py-4 fixed w-full top-0 z-50 transition-all duration-300 ${
@@ -103,20 +99,7 @@ const Navbar = () => {
             <LanguageSwitcher />
             
             {isLoggedIn ? (
-              <div className="flex items-center space-x-2">
-                <div className="text-sm">
-                  <span className="font-medium text-gray-700 dark:text-gray-300">
-                    {user?.name}
-                  </span>
-                  <span className="ml-1 px-2 py-0.5 bg-rental-100 dark:bg-rental-900 text-rental-700 dark:text-rental-300 rounded-full text-xs">
-                    {user?.role === 'admin' ? t('admin') : t('user')}
-                  </span>
-                </div>
-                <Button variant="outline" size="sm" className="flex items-center" onClick={logout}>
-                  <LogOut className="h-4 w-4 mr-2" />
-                  {t('logout')}
-                </Button>
-              </div>
+              <UserMenu />
             ) : (
               <>
                 <Link to="/login">
@@ -136,6 +119,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center space-x-2">
             <ThemeSwitcher />
             <LanguageSwitcher />
+            {isLoggedIn && <UserMenu />}
             <button
               className="text-gray-600 dark:text-gray-300 hover:text-rental-600 dark:hover:text-rental-400 focus:outline-none"
               onClick={toggleMobileMenu}
@@ -197,36 +181,19 @@ const Navbar = () => {
               >
                 {t('contact')}
               </Link>
-              <div className="border-t dark:border-gray-700 mt-2 pt-2 flex flex-col space-y-2 p-3">
-                {isLoggedIn ? (
-                  <>
-                    <div className="text-sm p-2">
-                      <span className="font-medium text-gray-700 dark:text-gray-300">
-                        {user?.name}
-                      </span>
-                      <span className="ml-1 px-2 py-0.5 bg-rental-100 dark:bg-rental-900 text-rental-700 dark:text-rental-300 rounded-full text-xs">
-                        {user?.role === 'admin' ? t('admin') : t('user')}
-                      </span>
-                    </div>
-                    <Button variant="outline" size="sm" className="flex items-center justify-center w-full" onClick={handleLogout}>
-                      <LogOut className="h-4 w-4 mr-2" />
-                      {t('logout')}
+              {!isLoggedIn && (
+                <div className="border-t dark:border-gray-700 mt-2 pt-2 flex flex-col space-y-2 p-3">
+                  <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
+                    <Button variant="outline" size="sm" className="flex items-center justify-center w-full">
+                      <User className="h-4 w-4 mr-2" />
+                      {t('login')}
                     </Button>
-                  </>
-                ) : (
-                  <>
-                    <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                      <Button variant="outline" size="sm" className="flex items-center justify-center w-full">
-                        <User className="h-4 w-4 mr-2" />
-                        {t('login')}
-                      </Button>
-                    </Link>
-                    <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
-                      <Button className="w-full bg-rental-600 hover:bg-rental-700 dark:bg-rental-500 dark:hover:bg-rental-600">{t('signup')}</Button>
-                    </Link>
-                  </>
-                )}
-              </div>
+                  </Link>
+                  <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
+                    <Button className="w-full bg-rental-600 hover:bg-rental-700 dark:bg-rental-500 dark:hover:bg-rental-600">{t('signup')}</Button>
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         )}

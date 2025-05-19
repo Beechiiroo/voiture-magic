@@ -8,6 +8,7 @@ interface User {
   name: string;
   email: string;
   role: UserRole;
+  avatar?: string;
 }
 
 interface UserContextType {
@@ -17,6 +18,7 @@ interface UserContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   toggleFavorite: (carId: string) => void;
+  updateProfile: (data: Partial<User>) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -52,7 +54,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         id: '1',
         name: 'Admin User',
         email: 'admin@example.com',
-        role: 'admin'
+        role: 'admin',
+        avatar: `https://api.dicebear.com/7.x/initials/svg?seed=AU&backgroundColor=6366f1`
       };
       
       setUser(userData);
@@ -62,11 +65,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     
     // For demo purposes, let any other email/password be a regular user
+    const userName = email.split('@')[0];
     const userData: User = {
       id: `user-${Date.now()}`,
-      name: email.split('@')[0],
+      name: userName,
       email: email,
-      role: 'user'
+      role: 'user',
+      avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${userName.substring(0, 2)}&backgroundColor=6366f1`
     };
     
     setUser(userData);
@@ -93,6 +98,14 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
   
+  const updateProfile = (data: Partial<User>) => {
+    if (!user) return;
+    
+    const updatedUser = { ...user, ...data };
+    setUser(updatedUser);
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+  };
+  
   return (
     <UserContext.Provider
       value={{
@@ -101,7 +114,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoggedIn: !!user,
         login,
         logout,
-        toggleFavorite
+        toggleFavorite,
+        updateProfile
       }}
     >
       {children}

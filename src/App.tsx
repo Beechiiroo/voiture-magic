@@ -21,6 +21,7 @@ import VehicleDetails from "./pages/VehicleDetails";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import CookiePolicy from "./pages/CookiePolicy";
+import Profile from "./pages/Profile";
 
 const App = () => {
   // Create a new QueryClient instance inside the component
@@ -56,6 +57,7 @@ const App = () => {
                   <Route path="/voitures/:id" element={<VehicleDetails />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/reservations" element={<Reservations />} />
+                  <Route path="/profile" element={<Profile />} />
                   <Route path="/confidentialite" element={<PrivacyPolicy />} />
                   <Route path="/conditions" element={<TermsOfService />} />
                   <Route path="/cookies" element={<CookiePolicy />} />
