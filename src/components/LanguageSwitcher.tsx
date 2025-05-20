@@ -36,7 +36,9 @@ const LanguageSwitcher = () => {
             onClick={() => changeLanguage(lang)}
             className="flex items-center gap-2"
           >
-            <span className="text-base mr-1">{lang.flag}</span>
+            <span className="text-base mr-1 transition-transform hover:scale-125 inline-block">
+              {lang.flag}
+            </span>
             <span>{lang.name}</span>
             {language.code === lang.code && (
               <span className="w-2 h-2 rounded-full bg-green-500 ml-auto"></span>

@@ -45,8 +45,10 @@ const Navbar = () => {
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2 group">
-              <Car className="h-6 w-6 text-rental-600 group-hover:scale-110 transition-transform" />
-              <span className="text-xl font-bold dark:text-white">CarRental<span className="text-rental-600">Pro</span></span>
+              <Car className="h-6 w-6 text-rental-600 group-hover:scale-110 transition-transform animate-pulse" />
+              <span className="text-xl font-bold dark:text-white">
+                {t("carRentalPro")}<span className="text-rental-600">Pro</span>
+              </span>
             </Link>
           </div>
 
